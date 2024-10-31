@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 .npmrc
 node_modules/
+facelivenessdetector-assets/
