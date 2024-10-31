@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "azure-ai-vision-face-ui": "^0.18.0-beta.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
