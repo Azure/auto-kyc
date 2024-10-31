@@ -1,0 +1,58 @@
+<div class="brightnessContainer">
+    <div id="brightness" class="brightness" role="alertdialog" aria-describedby="brightnessText" hidden>
+        <div class="justifyMiddle">
+            <div class="center" id="brightnessText" role="status">Increase your screen brightness to maximum</div>
+            <div id="brightnessVis" class="center">
+                <img id="brightnessImg" title="Maximize brightness guidance animation" role="presentation">
+            </div>
+            <div class="brightnessTips" id="brightnessTips">
+                <div class="brightnessTip" id="brightnessTip1">
+                    <img id="brightnessTip1Img" title="Center your face in the preview"/>
+                    <div>
+                        <span class="tipText" style="font-weight: bold" id="tip1Title">Tip 1:</span>
+                        <span class="tipText" id="tip1"> Center your face in the preview.</span>
+                    </div>
+                </div>
+                <div class="brightnessTip" id="brightnessTip2">
+                    <img id="brightnessTip2Img" title="You may be asked to smile"/>
+                    <div>
+                        <span class="tipText" id="tip2Title" style="font-weight: bold">Tip 2: </span>
+                        <span class="tipText" id="tip2">You may be asked to smile.</span>
+                    </div>
+                </div>
+                <div class="brightnessTip" id="brightnessTip3">
+                    <img id="brightnessTip3Img" title="You may be asked to move your nose towards the green color"/>
+                    <div id="tip3GreenSector"></div>
+                    <div>
+                        <span class="tipText" id="tip3Title" style="font-weight: bold">Tip 3: </span>
+                        <span class="tipText"
+                              id="tip3">You may be asked to move your nose towards the green color.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="center" id="startButton">
+                <button class="center" id="start" tabindex="0">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="camera" class="camera center" hidden>
+    <div id="preview" class="preview">
+        <canvas id="canvas" hidden></canvas>
+        <div id="videoContainer" class="videoContainer">
+            <div id="pose" class="pose" hidden></div>
+            <video id="video" class="video" playsinline muted autoplay></video>
+            <div class="activeMotion">
+                <img id="activeMotionImg" class="activeMotionImg hidden"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spinnerCheck" id="spinnerCheck">
+    <svg id="check" class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 100 100" xml:space="preserve">
+      <circle id="circle" cx="50" cy="50" r="46" fill="transparent"/>
+        <polyline id="tick" points="25,55 45,70 75,33" fill="transparent"/>
+    </svg>
+</div>
+<div class="feedbackMessage" id="feedbackMessage" role="alert"><span id="feedbackForFace"></span></div>

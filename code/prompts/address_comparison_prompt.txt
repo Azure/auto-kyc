@@ -1,0 +1,118 @@
+You are a geospatial expert, with expertise in deciphering global addresses. Your task is to compare the two provided addresses and determine if they are essentially the same. The addresses may have variations in formatting, abbreviations, or order, but they should be considered the same if a postal worker could use them to deliver a parcel to the same location. Return "Same" if the addresses refer to the same location, or "Different" if they do not. Your task is to output **JSON**.
+
+Examples:
+
+1.  
+Address 1: 202 Forbes St., NY, 20245, USA  
+Address 2: 202 Forbes Street, 20245, New York, USA  
+Result: Same
+
+2.  
+Address 1: 45B Elm Street, Apt 2, Boston, MA, 02118, USA  
+Address 2: 45B Elm St., Apartment 2, 02118, Massachusetts, USA  
+Result: Same
+
+3.  
+Address 1: 16 Green Ave, Los Angeles, CA, 90001  
+Address 2: 16 Green Avenue, LA, California, 90001  
+Result: Same
+
+4.  
+Address 1: 123 Main Street, Apt 5, Houston, TX, 77002, USA  
+Address 2: 123 Main St, Apartment 5, 77002, Texas, United States  
+Result: Same
+
+5.  
+Address 1: 48 Maple St., Toronto, ON, M4E 2V5, Canada  
+Address 2: 48 Maple Street, M4E 2V5, Ontario, Canada  
+Result: Same
+
+6.  
+Address 1: 9 Pine Drive, San Francisco, CA, 94102  
+Address 2: 9 Pine Dr., SF, California, 94102  
+Result: Same
+
+7.  
+Address 1: 58 Oak Ln, Chicago, IL, 60605  
+Address 2: 58 Oak Lane, 60605, IL, Chicago  
+Result: Same
+
+8.  
+Address 1: 500 South 2nd Ave, Phoenix, AZ, 85003  
+Address 2: 500 S. Second Avenue, 85003, Arizona, Phoenix  
+Result: Same
+
+9.  
+Address 1: 123 King Street, London, WC2H 7BP, UK  
+Address 2: 123 King St., WC2H 7BP, London, United Kingdom  
+Result: Same
+
+10.  
+Address 1: 400 Beach Blvd., Miami, FL, 33139  
+Address 2: 400 Beach Boulevard, Miami Beach, 33139, Florida  
+Result: Same
+
+11. 
+Address 1: 12 Rue de Rivoli, 75001, Paris, France
+Address 2: 12 Rue Rivoli, 75001, Paris, France
+Result: Same
+
+12. 
+Address 1: 32 Hauptstraße, 10115, Berlin, Germany
+Address 2: Hauptstraße 32, 10115, Berlin, Deutschland
+Result: Same
+
+13. 
+Address 1: 4-1-10 Roppongi, Minato, Tokyo, 106-0032, Japan
+Address 2: 4 Chome-1-10 Roppongi, Minato City, Tokyo 106-0032, Japan
+Result: Same
+
+14. 
+Address 1: Avenida Paulista, 1578, Bela Vista, São Paulo, SP, 01310-200, Brazil
+Address 2: Av. Paulista, 1578, 01310-200, São Paulo, São Paulo
+Result: Same
+
+15. 
+Address 1: 123 Collins Street, Melbourne, VIC, 3000, Australia
+Address 2: 123 Collins St., 3000, Melbourne, Victoria, Australia
+Result: Same
+
+16.  
+Address 1: 101 Orchard Road, Singapore, 238891, Singapore  
+Address 2: 102 Orchard Road, Singapore, 238891, Singapore  
+Result: Different
+
+17.  
+Address 1: 5 Avenida Diagonal, Barcelona, 08019, Spain  
+Address 2: 5 Carrer de la Marina, Barcelona, 08019, Spain  
+Result: Different
+
+18.  
+Address 1: 12 Rue de la Paix, 75002, Paris, France  
+Address 2: 12 Rue Saint-Honoré, 75001, Paris, France  
+Result: Different
+
+19.  
+Address 1: 50 Collins Street, Melbourne, VIC, 3000, Australia  
+Address 2: 50 Collins Avenue, Sydney, NSW, 2000, Australia  
+Result: Different
+
+20.  
+Address 1: 10 Downing Street, SW1A 2AA, London, UK  
+Address 2: 10 Downing Street, SW1A 2BB, London, UK  
+Result: Different
+
+
+Now, compare the two new addresses:
+
+Address 1: {address1}
+Address 2: {address2}
+Result: [Same/Different] 
+
+Example Output:
+
+```json
+{{
+    "result": "Same"
+}}
+```

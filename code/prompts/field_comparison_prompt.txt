@@ -1,0 +1,330 @@
+You are a forensic expert, comparing the fields of two ID documents. Your task is to compare the two provided field strings and determine if they are essentially the same. These field strings can represent various fields from ID documents (e.g., dates, license numbers, Social Security Numbers, places of issue, etc.). Return "Same" if the field strings refer to the same value, or "Different" if they do not. Your task is to output JSON.
+
+The comparison should account for different formats and variations in how these fields may be presented, such as differences in date formats (MM/DD/YYYY vs DD/MM/YYYY), abbreviations, and regional spellings.
+
+Return:
+- "Same" if the fields are clearly equivalent despite differences in formatting (e.g. 14.06.1946 and 06.14.1946 should be the Same, since it's not possible to have 14 as the month value)
+- "Different" if the fields clearly represent different values.
+- "ToBeChecked" if there is an ambiguity that requires manual review, such as cases where date formats may be inverted, leading to potential confusion (e.g., 06/08/1946 vs 08/06/1946).
+
+
+
+
+Examples:
+
+1.  
+Field 1: 123-45-6789  
+Field 2: 123-45-6789  
+Result: Same
+
+2.  
+Field 1: 2020-11-25  
+Field 2: 25th November 2020  
+Result: Same
+
+3.  
+Field 1: A12345678  
+Field 2: A12345678  
+Result: Same
+
+4.  
+Field 1: 05/12/1985  
+Field 2: 12 May 1985  
+Result: Same
+
+5.  
+Field 1: 987654321  
+Field 2: 9876543210  
+Result: Different
+
+6.  
+Field 1: 2023-06-15  
+Field 2: 15 June 2023  
+Result: Same
+
+7.  
+Field 1: S5009876  
+Field 2: S5009876  
+Result: Same
+
+8.  
+Field 1: 123456789012  
+Field 2: 123-456-789-012  
+Result: Same
+
+9.  
+Field 1: 12/31/2022  
+Field 2: 31st December 2022  
+Result: Same
+
+10.  
+Field 1: A456XYZ  
+Field 2: A456XYZ  
+Result: Same
+
+11.  
+Field 1: 2021-03-10  
+Field 2: 03/10/2021  
+Result: Same
+
+12.  
+Field 1: CA654321  
+Field 2: CA654321  
+Result: Same
+
+13.  
+Field 1: 111-22-3333  
+Field 2: 111223333  
+Result: Same
+
+14.  
+Field 1: 07/14/1990  
+Field 2: July 14, 1990  
+Result: Same
+
+15.  
+Field 1: B7654321  
+Field 2: B7654322  
+Result: Different
+
+16.  
+Field 1: 2025-09-18  
+Field 2: 18th September 2025  
+Result: Same
+
+17.  
+Field 1: M123456789  
+Field 2: M123456789  
+Result: Same
+
+18.  
+Field 1: 987-654-321  
+Field 2: 987654321  
+Result: Same
+
+19.  
+Field 1: 02/28/2000  
+Field 2: February 28, 2000  
+Result: Same
+
+20.  
+Field 1: Z5001234  
+Field 2: Z50012345  
+Result: Different
+
+21.  
+Field 1: 1986-07-22  
+Field 2: 22/07/1986  
+Result: Same
+
+22.  
+Field 1: DL1234567  
+Field 2: DL1234567  
+Result: Same
+
+23.  
+Field 1: 1234ABCD  
+Field 2: ABCD1234  
+Result: Different
+
+24.  
+Field 1: 987-65-4321  
+Field 2: 987-65-4321  
+Result: Same
+
+25.  
+Field 1: 2020/05/14  
+Field 2: 14 May 2020  
+Result: Same
+
+26.  
+Field 1: AB-98765  
+Field 2: AB98765  
+Result: Same
+
+27.  
+Field 1: 05/11/1995  
+Field 2: November 5, 1995  
+Result: Different
+
+28.  
+Field 1: 9876543201  
+Field 2: 987654321  
+Result: Different
+
+29.  
+Field 1: 2024-12-01  
+Field 2: 1st December 2024  
+Result: Same
+
+30.  
+Field 1: DL-987654  
+Field 2: DL987654  
+Result: Same
+
+31.  
+Field 1: New York, NY, USA  
+Field 2: New York, USA  
+Result: Same
+
+32.  
+Field 1: Paris, France  
+Field 2: Paris, Île-de-France, France  
+Result: Same
+
+33.  
+Field 1: Tokyo, Japan  
+Field 2: Tokyo, Japan  
+Result: Same
+
+34.  
+Field 1: Sydney, NSW, Australia  
+Field 2: Sydney, New South Wales, Australia  
+Result: Same
+
+35.  
+Field 1: Berlin, Germany  
+Field 2: Berlin, DE  
+Result: Same
+
+36.  
+Field 1: Los Angeles, CA, USA  
+Field 2: Los Angeles, California, USA  
+Result: Same
+
+37.  
+Field 1: Mumbai, Maharashtra, India  
+Field 2: Mumbai, India  
+Result: Same
+
+38.  
+Field 1: Rome, Italy  
+Field 2: Roma, Italy  
+Result: Same
+
+39.  
+Field 1: Toronto, ON, Canada  
+Field 2: Toronto, Ontario, Canada  
+Result: Same
+
+40.  
+Field 1: São Paulo, Brazil  
+Field 2: Sao Paulo, Brazil  
+Result: Same
+
+41.  
+Field 1: Mexico City, Mexico  
+Field 2: Ciudad de México, Mexico  
+Result: Same
+
+42.  
+Field 1: London, UK  
+Field 2: London, United Kingdom  
+Result: Same
+
+43.  
+Field 1: Buenos Aires, Argentina  
+Field 2: Buenos Aires, Argentina  
+Result: Same
+
+44.  
+Field 1: Vancouver, BC, Canada  
+Field 2: Vancouver, British Columbia, Canada  
+Result: Same
+
+45.  
+Field 1: Chicago, IL, USA  
+Field 2: Chicago, Illinois, USA  
+Result: Same
+
+46.  
+Field 1: Cairo, Egypt  
+Field 2: Cairo, EG  
+Result: Same
+
+47.  
+Field 1: Johannesburg, South Africa  
+Field 2: Johannesburg, Gauteng, South Africa  
+Result: Same
+
+48.  
+Field 1: Moscow, Russia  
+Field 2: Moskva, Russia  
+Result: Same
+
+49.  
+Field 1: Zurich, Switzerland  
+Field 2: Zürich, Switzerland  
+Result: Same
+
+50.  
+Field 1: Kuala Lumpur, Malaysia  
+Field 2: KL, Malaysia  
+Result: Same
+
+51.  
+Field 1: '06.14.1946'  
+Field 2: '14.06.1946'  
+Result: Same
+
+52.  
+Field 1: '06.08.1946'  
+Field 2: '08.06.1946'  
+Result: ToBeChecked
+
+53.  
+Field 1: '12/25/1990'  
+Field 2: '25/12/1990'  
+Result: Same
+
+54.  
+Field 1: '02/11/2000'  
+Field 2: '11/02/2000'  
+Result: ToBeChecked
+
+55.  
+Field 1: '1995-07-04'  
+Field 2: '04/07/1995'  
+Result: Same
+
+56.  
+Field 1: '01.03.1987'  
+Field 2: '03/01/1987'  
+Result: Same
+
+57.  
+Field 1: '03-15-1975'  
+Field 2: '15/03/1975'  
+Result: Same
+
+58.  
+Field 1: '2020/10/05'  
+Field 2: '05.10.2020'  
+Result: Same
+
+59.  
+Field 1: '11.04.2011'  
+Field 2: '04/11/2011'  
+Result: ToBeChecked
+
+60.  
+Field 1: '04.30.1965'  
+Field 2: '30/04/1965'  
+Result: Same
+
+---
+
+Now, compare the two new strings:
+
+Field Name: {field_name}
+Field 1: {field1}
+Field 2: {field2}
+Result: [Same/Different]
+
+Example Output:
+
+```json
+{{
+    "result": "Same"
+}}
+```
