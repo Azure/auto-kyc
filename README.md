@@ -45,23 +45,26 @@ The KYC application is divided into two main components:
 
 ### Prerequisites
 
-- Node.js (for the frontend)
-- Python 3.8+ (for the backend)
+- npm package manager installed on your machine for the frontend
+- Python 3.10+ (for the backend)
 - Azure account with Face API and OpenAI services enabled
 - Azure Blob Storage and Cosmos DB set up
+
+
 
 ### Setup Instructions
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/kyc-application.git
-   cd kyc-application
+   git clone https://github.com/Azure/auto-kyc.git
+   cd auto-kyc
    ```
 
 2. **Backend Setup**:
    - Install Python dependencies:
      ```bash
-     cd backend
+     conda create -n auto-kyc python=3.10
+     conda activate auto-kyc
      pip install -r requirements.txt
      ```
    - Set up environment variables in a `.env` file:
@@ -75,13 +78,13 @@ The KYC application is divided into two main components:
      ```
    - Run the FastAPI server:
      ```bash
-     uvicorn main:app --reload
+     uvicorn api:app --port 80 --reload
      ```
 
 3. **Frontend Setup**:
    - Navigate to the frontend directory:
      ```bash
-     cd ../frontend
+     cd ../ui
      ```
    - Install frontend dependencies:
      ```bash
@@ -93,31 +96,37 @@ The KYC application is divided into two main components:
      ```
    - The application will be available at `http://localhost:3000`.
 
-## Usage
 
-1. **Uploading Documents**:
-   - Navigate to the "Upload Documents" page and select an ID document to upload.
-   - The uploaded files will be sent to the backend for processing.
+### Face API Access and Installation
 
-2. **Viewing Customer Data**:
-   - Select a customer from the "View/Edit Customer Data" page.
-   - The system fetches customer records from the Cosmos DB.
+Please follow the instructions in the [link here](https://github.com/Azure-Samples/azure-ai-vision-sdk/blob/main/GET_FACE_ARTIFACTS_ACCESS.md), to apply for access. 
 
-3. **Document Analysis**:
-   - Go to the "Document Comparison" page to compare the uploaded document with the stored customer data.
-   - The backend performs field extraction, face recognition, and semantic data comparison.
+After getting access, and creating the Face API resource on Azure, you will need to:
+1. Generate an access token
+1. Create an .npmrc file with the access token, please follow the instructions [here](https://github.com/Azure-Samples/azure-ai-vision-sdk/blob/main/samples/web/SetupEnvironment.md).
+1. Download the node module:
+    ```bash
+    npm install azure-ai-vision-face-ui@latest
+    ```
+1. After installing the `azure-ai-vision-face-ui` node package, navigate to the installed files under `ui > react-js > node_modules > azure-ai-vision-face-ui` and copy the whole folder and the contents of the `facelivenessdetector-assets` directory as is into the `ui > react-js > public` directory.
 
-4. **Review Logs and Status Indicators**:
-   - The sidebar displays the status of data matching and logs any discrepancies found during the analysis.
+The `ui > react-js > public` directory should eventually look like this:
+
+```bash
+public
+├── assets
+├── facelivenessdetector-assets
+├── sample-documents
+└── index.html
+```
 
 ## Folder Structure
 
 The project is organized as follows:
 
 ```
-kyc-application/
-├── backend/                 # Python FastAPI backend
-│   ├── main.py              # Main FastAPI application
+auto-kyc/
+├── code/                 # Python FastAPI backend
 │   ├── utils/               # Helper modules for storage, document processing, etc.
 │   ├── data_models/         # Data models for ID document processing
 │   └── env_vars.py          # Environment variable configuration
@@ -125,6 +134,7 @@ kyc-application/
 │   ├── public/              # Static assets
 │   ├── src/                 # Source code for the React application
 │   └── package.json         # Frontend dependencies
+└── api.py                   # API Server
 └── README.md                # Project documentation
 ```
 
@@ -151,24 +161,6 @@ kyc-application/
 - The application uses Azure Blob Storage to securely store document images and processed files.
 - Azure Cosmos DB is employed to store and manage customer records, with the backend providing interfaces for reading and updating records.
 
-## API Endpoints
-
-### Customer Management
-
-- **`GET /api/customers`**: Retrieve a list of customers.
-- **`GET /api/customer/{customer_id}`**: Fetch details for a specific customer.
-
-### Document Handling
-
-- **`POST /api/upload`**: Upload documents to the backend for processing.
-- **`POST /api/analyze`**: Analyze an uploaded document, including field extraction and face recognition.
-- **`POST /api/get_sas`**: Obtain a SAS URL for accessing secure resources.
-- **`POST /api/update`**: Update a customer's data in the database.
-
-### Status and Logs
-
-- **`GET /api/status/{customer_id}`**: Get the current status of a customer's verification.
-- **`GET /api/logs/{customer_id}`**: Retrieve logs of verification checks for a customer.
 
 ## Contributing
 
