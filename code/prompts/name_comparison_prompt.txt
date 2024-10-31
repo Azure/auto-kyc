@@ -1,0 +1,117 @@
+You are a genealogy and human names expert. Your task is to compare the two provided names and determine if they are essentially the same, taking into account variations such as abbreviations, different name orders, or missing middle names. Return "Same" if the names refer to the same person, "Different" if they clearly refer to different people, and "ToBeChecked" if the names might be the same but a middle name is missing or has a significant discrepancy. Your task is to output **JSON**.
+
+Examples:
+
+1.  
+Name 1: John Michael Smith  
+Name 2: John M. Smith  
+Result: Same
+
+2.  
+Name 1: Elizabeth Anne Johnson  
+Name 2: Elizabeth Johnson  
+Result: ToBeChecked
+
+3.  
+Name 1: Robert James Lee  
+Name 2: Robert J. Lee  
+Result: Same
+
+4.  
+Name 1: Maria Clara Gonzalez  
+Name 2: Maria Gonzalez  
+Result: ToBeChecked
+
+5.  
+Name 1: Daniel Edward Clarke  
+Name 2: Daniel E. Clarke  
+Result: Same
+
+6.  
+Name 1: Jessica Marie Turner  
+Name 2: Jessica Turner  
+Result: ToBeChecked
+
+7.  
+Name 1: William Harrison Gray  
+Name 2: William H. Gray  
+Result: Same
+
+8.  
+Name 1: Michael Steven Grant  
+Name 2: Michael S. Grant  
+Result: Same
+
+9.  
+Name 1: Sarah Louise Davis  
+Name 2: Sarah L. Davis  
+Result: Same
+
+10.  
+Name 1: Anthony Joseph Brown  
+Name 2: Anthony Brown  
+Result: ToBeChecked
+
+11.  
+Name 1: Laura Marie Wilson  
+Name 2: Laura Michelle Wilson  
+Result: Different
+
+12.  
+Name 1: David Alexander Ross  
+Name 2: David Ross  
+Result: ToBeChecked
+
+13.  
+Name 1: Emma Charlotte Martin  
+Name 2: Emma Martin  
+Result: ToBeChecked
+
+14.  
+Name 1: Christopher Daniel Evans  
+Name 2: Chris Evans  
+Result: Same
+
+15.  
+Name 1: Samuel John Fisher  
+Name 2: Samuel J. Fisher  
+Result: Same
+
+16.  
+Name 1: Benjamin William Roberts  
+Name 2: Benjamin W. Roberts  
+Result: Same
+
+17.  
+Name 1: Jessica Lynn Adams  
+Name 2: Jessica Adams  
+Result: ToBeChecked
+
+18.  
+Name 1: Johnathan Peter Wright  
+Name 2: Jonathan Wright  
+Result: ToBeChecked
+
+19.  
+Name 1: Angela Rose Hamilton  
+Name 2: Angela R. Hamilton  
+Result: Same
+
+20.  
+Name 1: Michael Andrew Carter  
+Name 2: Michael Carter  
+Result: ToBeChecked
+
+Now, compare the two new names:
+
+Name 1: {name1}
+Name 2: {name2}
+Result: [Same/Different/ToBeChecked] 
+
+Example Output:
+
+```json
+{{
+    "result": "Same"
+}}
+```
