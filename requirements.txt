@@ -12,7 +12,7 @@ opencv-python
 matplotlib
 pdf2image
 numpy
-azure-ai-vision-face
+azure-ai-vision-face>=1.0.0b2
 rich
 azure-cosmos
 azure-mgmt-cosmosdb
