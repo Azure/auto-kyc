@@ -40,7 +40,7 @@ class BlobStorageHelper:
         except Exception:
             self.container_client.create_container()
 
-    def create_sas_from_blob(self, blob_name, expiry_days=1):
+    def create_sas_from_blob(self, blob_name, expiry_days=7):
         """
         Creates a SAS token for the specified blob.
 
@@ -238,7 +238,7 @@ class BlobStorageHelper:
         return local_file_path
 
 
-    def upload_document_with_sas(self, local_file_path, blob_name=None, expiry_days=1):
+    def upload_document_with_sas(self, local_file_path, blob_name=None, expiry_days=7):
         """
         Uploads a local file to Azure Blob Storage and generates a SAS token.
 

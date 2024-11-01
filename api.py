@@ -1,22 +1,20 @@
+# api.py
 import os
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from fastapi import FastAPI, HTTPException
+from fastapi import HTTPException
 from pydantic import BaseModel
 import uuid
-from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import base64
-
 
 import sys
 sys.path.append('code')
 
 import tempfile
-import os
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -33,7 +31,7 @@ logger = logging.getLogger('uvicorn.error')
 logger.setLevel(logging.INFO)
 
 cosmos = CosmosDBHelper()
-blob_helper = BlobStorageHelper() 
+blob_helper = BlobStorageHelper()
 
 
 class LivenessSessionRequest(BaseModel):
@@ -51,46 +49,42 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # ["http://localhost:80", "http://localhost:3000"],  # React app runs on port 3000
+    allow_origins=["*"],  # ["http://localhost:80", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# @app.post("/api/detectLiveness")
-# async def detectLiveness(info: dict):
-#     global flc
-#     print("info", info)
-#     flc = FaceLivenessDetectionService()
-
-#     return flc.startLivenessDetection()
-
-
 @app.post("/api/detectLiveness", response_model=LivenessSessionResponse)
-async def detect_liveness(session_request: LivenessSessionRequest):
-    # Log the request details (optional)
-    print("Received session creation request:", session_request, type(session_request))
+async def detect_liveness(
+    parameters: str = Form(...),
+    verify_image: UploadFile = File(None)
+):
+    # Log incoming data for debugging
+    print("Received parameters:", parameters)
+    print("Received verify_image:", verify_image.filename if verify_image else None)
 
-    # Validate the operation mode if needed, or add logic to handle it
-    valid_modes = {"Passive", "PassiveActive"}  # Example modes
-    if session_request.livenessOperationMode not in valid_modes:
-        raise HTTPException(status_code=400, detail="Invalid liveness operation mode")
+    # Parse the parameters
+    session_request = LivenessSessionRequest.parse_raw(parameters)
+
+    # Read the verify image if provided
+    verify_image_content = None
+    if verify_image is not None:
+        verify_image_content = await verify_image.read()
 
     flc = FaceLivenessDetectionService()
-    session = await flc.startLivenessDetection(session_request)
+    session = await flc.startLivenessDetection(session_request, verify_image_content)
 
     return {
         "authToken": session.auth_token,
         "session_id": session.session_id
-        }
-
+    }
 
 @app.post("/api/livenessComplete")
 async def livenessComplete(info: dict):
     print("info", info)
     flc = FaceLivenessDetectionService()
     await flc.queryLivenessDetectionResults(info.get("session_id"))
-
 
 @app.get("/api/customers")
 async def get_customers():
@@ -109,17 +103,15 @@ async def get_customers():
         })
     return customer_list
 
-
 @app.post("/api/get_sas")
 async def get_sas(info: dict):
     file_url = info.get("url", "")
     file_url = file_url.replace("'", "").replace('"', '')
-    return {"sas":blob_helper.create_sas_from_blob(file_url)}
-
+    return {"sas": blob_helper.create_sas_from_blob(file_url)}
 
 @app.get("/api/customer/{customer_id}")
 async def get_customer(customer_id: str):
-    # Placeholder: Fetch customer data from the database
+    # Fetch customer data from the database
     customer_record = cosmos.read_document(customer_id, partition_key="customers")
     if customer_record:
         return customer_record
@@ -128,14 +120,12 @@ async def get_customer(customer_id: str):
 
 @app.post("/api/upload")
 async def upload_files(files: List[UploadFile] = File(...)):
-    # Placeholder: Process uploaded files
-    print("hi")
+    # Process uploaded files
     file_names = [file.filename for file in files]
     return {"uploaded_files": file_names}
 
 @app.post("/api/analyze")
 async def analyze_documents(info: dict):
-    # Placeholder: Analyze uploaded documents and compare with application data
     customer_id = info.get("customer_id", "")
     id_document = base64.b64decode(info.get("id_document", ""))
     id_document_name = info.get("id_document_name", "")
@@ -153,22 +143,18 @@ async def analyze_documents(info: dict):
 
 @app.get("/api/status/{customer_id}")
 async def get_status(customer_id: str):
-    # Placeholder: Return verification status
-    print("hi")
     return {"customer_id": customer_id, "status": "green"}
 
 @app.get("/api/logs/{customer_id}")
 async def get_logs(customer_id: str):
-    # Placeholder: Return logs
-    print("hi")
     return {"customer_id": customer_id, "logs": ["No discrepancies found."]}
 
 @app.post("/api/update")
 async def update_customer(data: dict):
-    # Placeholder: Update customer data in the database
+    data = copy.deepcopy(data)
+    del data['photo_sas']
+    del data['processedPhotoUrl']
     return cosmos.upsert_document(data)
-    return {"status": "success", "updated_data": data}
-
 
 # Mount the 'build' directory to serve static files
 app.mount("/", StaticFiles(directory="ui/react-js/build", html=True), name="static")

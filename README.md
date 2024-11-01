@@ -84,17 +84,12 @@ The KYC application is divided into two main components:
 3. **Frontend Setup**:
    - Navigate to the frontend directory:
      ```bash
-     cd ../ui
+     cd ../ui/react-js
      ```
    - Install frontend dependencies:
      ```bash
      npm install
      ```
-   - Start the React development server:
-     ```bash
-     npm start
-     ```
-   - The application will be available at `http://localhost:3000`.
 
 
 ### Face API Access and Installation
@@ -112,13 +107,34 @@ After getting access, and creating the Face API resource on Azure, you will need
 
 The `ui > react-js > public` directory should eventually look like this:
 
-```bash
+```
 public
 ├── assets
 ├── facelivenessdetector-assets
 ├── sample-documents
 └── index.html
 ```
+
+### Running the Solution
+
+After following the above instructions for installation, you can run the React App using the following commands. Please make sure that the FastAPI server has already started:
+
+   - Navigate to the frontend directory:
+     ```bash
+     cd ui/react-js
+     ```
+   - Optionally start the React development server (for development purposes only):
+     ```bash
+     npm start
+     ```
+   - The application will be available at `http://localhost:3000`.
+
+   - Build the React app which is served by the FastAPI server on port 80:
+     ```bash
+     npm run build
+     ```
+
+
 
 ## Folder Structure
 

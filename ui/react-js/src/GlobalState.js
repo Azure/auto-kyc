@@ -23,6 +23,8 @@ export const GlobalStateProvider = ({ children }) => {
     const storedLogs = JSON.parse(localStorage.getItem('logs') || '[]');
     const storedStatus = localStorage.getItem('status') || '';
     const storedPhotoStatus = localStorage.getItem('photoStatus') || '';
+    const storedCustomerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+    const storedCustomerList = JSON.parse(localStorage.getItem('customerList') || '[]');
 
     setUploadedFiles((prev) => (prev.length === 0 ? storedFiles : prev));
     setSelectedImageIndex((prev) => (prev === 0 ? storedImageIndex : prev));
@@ -31,6 +33,8 @@ export const GlobalStateProvider = ({ children }) => {
     setLogs((prev) => (prev.length === 0 ? storedLogs : prev));
     setStatus((prev) => (prev === '' ? storedStatus : prev));
     setPhotoStatus((prev) => (prev === '' ? storedPhotoStatus : prev));
+    setCustomerData((prev) => (Object.keys(prev).length === 0 ? storedCustomerData : prev));
+    setCustomerList((prev) => (prev.length === 0 ? storedCustomerList : prev));
   }, []);
 
   // Save state to localStorage whenever it changes
@@ -42,6 +46,13 @@ export const GlobalStateProvider = ({ children }) => {
     localStorage.setItem('logs', JSON.stringify(logs));
     localStorage.setItem('status', status);
     localStorage.setItem('photoStatus', photoStatus);
+
+    // Avoid storing photo_sas in localStorage, as it may expire
+    const customerDataToSave = { ...customerData };
+    delete customerDataToSave.photo_sas;
+    localStorage.setItem('customerData', JSON.stringify(customerDataToSave));
+
+    localStorage.setItem('customerList', JSON.stringify(customerList));
   }, [
     uploadedFiles,
     selectedImageIndex,
@@ -50,6 +61,8 @@ export const GlobalStateProvider = ({ children }) => {
     logs,
     status,
     photoStatus,
+    customerData,
+    customerList,
   ]);
 
   return (

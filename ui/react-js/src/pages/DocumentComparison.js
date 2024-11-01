@@ -53,6 +53,7 @@ function DocumentComparison() {
     setSelectedImageIndex(e.target.value);
   };
 
+  console.log('condition:', customerData && customerData.id && !customerData.photo_sas && customerData.photo);
   // Load customer photo if not already loaded
   useEffect(() => {
     if (customerData && customerData.id && !customerData.photo_sas && customerData.photo) {
@@ -64,6 +65,7 @@ function DocumentComparison() {
     try {
       if (customerData.photo) {
         const photoUrl = customerData.photo.replace(/['"]/g, '');
+        console.log('photoUrl:', photoUrl);
         const sasResponse = await axios.post('http://localhost:80/api/get_sas', {
           url: photoUrl,
         });
