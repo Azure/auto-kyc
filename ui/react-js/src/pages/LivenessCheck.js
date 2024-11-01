@@ -140,9 +140,32 @@ function LivenessCheck() {
 
     // Custom language dictionary (optional)
     azureAIVisionFaceUI.languageDictionary = {
-      None: 'Please hold still.',
-      LookAtCamera: 'Look at the camera.',
-      // ... other custom messages ...
+      "None": "Please hold still.",
+      "LookAtCamera": "Look at the camera.",
+      "FaceNotCentered": "Center your face in the circle.",
+      "MoveCloser": "Please move closer.",
+      "TooMuchMovement": "Too much movement detected.",
+      "TimedOut": "Session timed out.",
+      "IncreaseBrightnessToMax": "Increase screen brightness to maximum.",
+      "Smile": "Smile for the camera!",
+      "LookInFront": "Look straight ahead.",
+      "Continue": "Continue",
+      "HoldStill": "Hold still.",
+      "FaceDetected": "Face detected.",
+      "NoFaceDetected": "No face detected.",
+      "Processing": "Processing...",
+      "Authenticating": "Authenticating...",
+      "LivenessComplete": "Liveness check complete.",
+      "RealFaceDetected": "Real face detected.",
+      "SpoofFaceDetected": "Spoof face detected.",
+      "Tip1Title": "Tip 1:", 
+      "Tip1": "Center your face in the preview.",
+      "Tip2Title": "Tip 2:", 
+      "Tip2": "You may be asked to smile.",
+      "Tip3Title": "Tip 3:", 
+      "Tip3": "You may be asked to move your nose towards the green color.",
+      "AttentionNotNeeded": "Ok, you can relax now.",
+      "ContinueToMoveCloser": "Please move closer to the camera.",
     };
 
     livenessContainer.appendChild(azureAIVisionFaceUI);

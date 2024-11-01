@@ -152,8 +152,12 @@ async def get_logs(customer_id: str):
 @app.post("/api/update")
 async def update_customer(data: dict):
     data = copy.deepcopy(data)
-    del data['photo_sas']
-    del data['processedPhotoUrl']
+    try: del data['photo_sas']
+    except: pass
+
+    try: del data['processedPhotoUrl']
+    except: pass
+    
     return cosmos.upsert_document(data)
 
 # Mount the 'build' directory to serve static files
