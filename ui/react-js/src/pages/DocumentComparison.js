@@ -18,6 +18,8 @@ import {
   Switch,
 } from '@mui/material';
 
+const apiBaseUrl = window.API_BASE_URL;
+
 function DocumentComparison() {
   const {
     uploadedFiles,
@@ -66,7 +68,7 @@ function DocumentComparison() {
       if (customerData.photo) {
         const photoUrl = customerData.photo.replace(/['"]/g, '');
         console.log('photoUrl:', photoUrl);
-        const sasResponse = await axios.post('http://localhost:80/api/get_sas', {
+        const sasResponse = await axios.post(`${apiBaseUrl}/api/get_sas`, {
           url: photoUrl,
         });
         const updatedCustomerData = { ...customerData, photo_sas: sasResponse.data.sas };
@@ -93,7 +95,7 @@ function DocumentComparison() {
         id_document: base64data,
         id_document_name: fileData.name,
       };
-      const response = await axios.post('http://localhost:80/api/analyze', info);
+      const response = await axios.post(`${apiBaseUrl}/api/analyze`, info);
 
       // Update extracted data and logs
       setExtractedData(response.data.document_id_extracted_data);
@@ -107,10 +109,10 @@ function DocumentComparison() {
       const processedCustomerPhotoUrl = photoComparisonResult.photo_2;
 
       // Get SAS URLs for the processed images
-      const processedIdDocumentSasResponse = await axios.post('http://localhost:80/api/get_sas', {
+      const processedIdDocumentSasResponse = await axios.post(`${apiBaseUrl}/api/get_sas`, {
         url: processedIdDocumentUrl,
       });
-      const processedCustomerPhotoSasResponse = await axios.post('http://localhost:80/api/get_sas', {
+      const processedCustomerPhotoSasResponse = await axios.post(`${apiBaseUrl}/api/get_sas`, {
         url: processedCustomerPhotoUrl,
       });
 

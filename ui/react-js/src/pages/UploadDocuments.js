@@ -15,6 +15,8 @@ import {
   CardMedia,
 } from '@mui/material';
 
+const apiBaseUrl = window.API_BASE_URL;
+
 function UploadDocuments() {
   const {
     uploadedFiles,
@@ -94,7 +96,7 @@ function UploadDocuments() {
     }
 
     try {
-      await axios.post('http://localhost:8000/api/upload', formData);
+      await axios.post(`${apiBaseUrl}/api/upload`, formData);
       alert('Files uploaded successfully.');
     } catch (error) {
       console.error(error);

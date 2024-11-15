@@ -13,6 +13,9 @@ import {
   Box,
 } from '@mui/material';
 
+const apiBaseUrl = window.API_BASE_URL;
+console.log('API base URL:', apiBaseUrl);
+
 function ViewEditCustomerData() {
   const {
     customerList,
@@ -36,7 +39,7 @@ function ViewEditCustomerData() {
 
   const fetchCustomerList = async () => {
     try {
-      const response = await axios.get('http://localhost:80/api/customers');
+      const response = await axios.get(`${apiBaseUrl}/api/customers`);
       console.log('Customer list response:', response.data);
       setCustomerList(response.data);
     } catch (error) {
@@ -51,7 +54,7 @@ function ViewEditCustomerData() {
 
   const handleLoadCustomer = async () => {
     try {
-      const response = await axios.get(`http://localhost:80/api/customer/${selectedCustomerId}`);
+      const response = await axios.get(`${apiBaseUrl}/api/customer/${selectedCustomerId}`);
       setCustomerData(response.data);
       setCustomerDataText(JSON.stringify(response.data, null, 2));
     } catch (error) {
@@ -67,7 +70,7 @@ function ViewEditCustomerData() {
   const handleUpdateDB = async () => {
     try {
       const data = JSON.parse(customerDataText);
-      await axios.post('http://localhost:80/api/update', data);
+      await axios.post(`${apiBaseUrl}/api/update`, data);
       alert('Database updated successfully.');
       setCustomerData(data); // Update the global state
     } catch (error) {

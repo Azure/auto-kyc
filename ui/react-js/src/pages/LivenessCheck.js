@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { GlobalStateContext } from '../GlobalState';
 
+const apiBaseUrl = window.API_BASE_URL;
+
 function LivenessCheck() {
   const [authToken, setAuthToken] = useState(null);
   const [sessionId, setSessionId] = useState(null);
@@ -20,6 +22,7 @@ function LivenessCheck() {
   const [cameras, setCameras] = useState([]);
   const [selectedCamera, setSelectedCamera] = useState('');
   const { customerData, setCustomerData } = useContext(GlobalStateContext);
+  
 
   useEffect(() => {
     import('azure-ai-vision-face-ui')
@@ -59,7 +62,7 @@ function LivenessCheck() {
     try {
       if (customerData.photo) {
         const photoUrl = customerData.photo.replace(/['"]/g, '');
-        const response = await fetch('http://localhost:80/api/get_sas', {
+        const response = await fetch(`${apiBaseUrl}/api/get_sas`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: photoUrl }),
@@ -100,7 +103,7 @@ function LivenessCheck() {
       formData.append('verify_image', file);
 
       // Send the request to the backend
-      const sessionResponse = await fetch('http://localhost:80/api/detectLiveness', {
+      const sessionResponse = await fetch(`${apiBaseUrl}/api/detectLiveness`, {
         method: 'POST',
         body: formData,
       });
@@ -195,7 +198,7 @@ function LivenessCheck() {
 
   const notifyServerLivenessCompletion = async (resultData) => {
     try {
-      await fetch('http://localhost:80/api/livenessComplete', {
+      await fetch(`${apiBaseUrl}/api/livenessComplete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

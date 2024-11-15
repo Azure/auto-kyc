@@ -35,7 +35,7 @@ class CosmosDBHelper:
 
     def get_all_documents(self):
         try:
-            return list(self.container.read_all_items(max_item_count=10))
+            return list(self.container.read_all_items())
         except Exception as e:
             logging.error(f"Error reading all documents: {e}")
             return []

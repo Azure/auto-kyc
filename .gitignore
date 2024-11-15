@@ -165,3 +165,5 @@ node_modules/
 facelivenessdetector-assets/
 temp_imgs/
 build/
+.test
+* copy*

@@ -2,6 +2,7 @@
 import os
 
 from fastapi import FastAPI, Request, UploadFile, File, Form
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi import HTTPException
@@ -10,7 +11,7 @@ import uuid
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import base64
-
+import socket
 import sys
 sys.path.append('code')
 
@@ -33,6 +34,12 @@ logger.setLevel(logging.INFO)
 cosmos = CosmosDBHelper()
 blob_helper = BlobStorageHelper()
 
+hostname = socket.gethostname()
+local_ip = socket.gethostbyname(hostname)
+
+print("Hostname", hostname)
+print("Local IP Address:", local_ip)
+
 
 class LivenessSessionRequest(BaseModel):
     livenessOperationMode: str
@@ -49,7 +56,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ["http://localhost:80", "http://localhost:3000"],
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -160,5 +167,51 @@ async def update_customer(data: dict):
     
     return cosmos.upsert_document(data)
 
-# Mount the 'build' directory to serve static files
-app.mount("/", StaticFiles(directory="ui/react-js/build", html=True), name="static")
+# # Mount the 'build' directory to serve static files
+# app.mount("/", StaticFiles(directory="ui/react-js/build", html=True), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def serve_react_app(request: Request):
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    local_ip = os.environ['BACKEND']
+
+    try:
+        scheme = request.headers.get("X-Forwarded-Proto", request.url.scheme)
+        if scheme == "https":
+            port = 433
+        else:
+            port = 80
+    except:
+        scheme = "http"
+    
+        # Dynamically determine the server's base URL
+        if (request.url.port is None) or (request.url.port == ""): 
+            port = 80
+        else:
+            port = request.url.port
+
+    print("Local IP Address:", local_ip)
+    print("Scheme:", scheme)
+    print("Port:", port)
+
+    server_url = f"{scheme}://{local_ip}"
+
+    # Read the React app's `index.html` file
+    index_path = os.path.join("ui/react-js/build", "index.html")
+    with open(index_path, "r") as file:
+        html_content = file.read()
+
+    # Inject the base URL
+    html_content = html_content.replace("{{API_BASE_URL}}", server_url)
+
+    return HTMLResponse(content=html_content)
+
+
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/static", StaticFiles(directory="ui/react-js/build/static"), name="static")
+app.mount("/sample-documents", StaticFiles(directory="ui/react-js/public/sample-documents"), name="sample-documents")
+app.mount("/facelivenessdetector-assets", StaticFiles(directory="ui/react-js/build/facelivenessdetector-assets"), name="facelivenessdetector-assets")
+
+

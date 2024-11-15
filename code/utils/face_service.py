@@ -1,5 +1,6 @@
 import cv2
 import matplotlib.pyplot as plt
+from azure.identity import DefaultAzureCredential
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.vision.face import FaceClient
 from azure.ai.vision.face.models import (
@@ -23,7 +24,9 @@ class FaceRecognitionService:
         self.buffer = buffer
         self.work_dir = 'temp_imgs'
         os.makedirs(self.work_dir, exist_ok=True)
+        # self.credential = DefaultAzureCredential()
         self.face_client = FaceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+        # self.face_client = FaceClient(endpoint=endpoint, credential=self.credential)
         self.face_id_time_to_live = face_id_time_to_live
 
     def detect_faces(self, sample_file_path, display_image=False, print_results=False):

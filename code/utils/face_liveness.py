@@ -5,6 +5,7 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.vision.face import FaceSessionClient
 from azure.ai.vision.face.models import (
     CreateLivenessSessionContent,
+    CreateLivenessWithVerifySessionContent,
     LivenessOperationMode,
 )
 from azure.ai.vision.face.models import (
@@ -36,7 +37,7 @@ class FaceLivenessDetectionService:
         if verify_image_content is not None:
             # Create liveness session with verification
             created_session = self.face_session_client.create_liveness_with_verify_session(
-                CreateLivenessSessionContent(
+                CreateLivenessWithVerifySessionContent(
                     liveness_operation_mode=live_session_content.livenessOperationMode,
                     device_correlation_id=live_session_content.deviceCorrelationId,
                     send_results_to_client=live_session_content.sendResultsToClient,
